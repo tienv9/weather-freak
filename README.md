@@ -15,6 +15,8 @@ Go to command prompt and enter: <br/>
 (clone my repo) <br/>
 -cd weather-freak && npm install && ionic serve <br/>
 (run this command should open up the app in brower. If not then you're missing vue or ionic) <br/>
+<br/>
+You should now be good to open the <b>entire folder</b> with a code editor like VScode (required Vue, Typescript, and Ionic extension) to edit the code within the src folder <br/>
 
 <br/>
 <br/>
