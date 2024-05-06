@@ -1,4 +1,5 @@
 <template>
+    <ion-page>
     <ion-header class="ion-no-border" mode="ios">
       <ion-toolbar class ="ion-padding-start ion-padding-end ion-padding-top">
         <ion-title>Weather</ion-title>
@@ -7,7 +8,7 @@
 
     <ion-content>
     </ion-content>
-    
+    </ion-page>
 </template>
 
 <script setup lang="ts">
