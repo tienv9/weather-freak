@@ -1,6 +1,6 @@
-Install instruction: 
--Install node.js
--Install Android Studio (optional if you want to run Android emulator)
+Install instruction: <br/>
+-Install node.js <br/>
+-Install Android Studio (optional if you want to run Android emulator)<br/>
 
 
 Go to command prompt and enter:
