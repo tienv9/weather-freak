@@ -3,8 +3,11 @@
     <ion-header class="ion-no-border" mode="ios">
       <ion-toolbar class="ion-padding-start ion-padding-end">
         <ion-title>Weather</ion-title>
+        <span slot="start">
+          <NotificationButton />
+        </span>
         <span slot="end">
-          <ion-icon :icon="searchSharp" />
+          <SearchButton />
         </span>
       </ion-toolbar>
     </ion-header>
@@ -54,19 +57,22 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonCard } from '@ionic/vue';
-import { searchSharp } from 'ionicons/icons';
-import { ref } from 'vue' //Imported this
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonCard, IonButton, IonBadge } from '@ionic/vue';
+import { ref, onMounted } from 'vue' //Imported this
 import datas from './forecast.json'
 import MainWeather from '@/components/MainWeather.vue'
 import InfoTab from '@/components/InfoTab.vue'
-import { onMounted } from 'vue';
+import NotificationButton from '@/components/NotificationButton.vue';
+import SearchButton from '@/components/SearchButton.vue';
 
-//bug where if default color is set to white, it will change to black for no reason when open setting
-/*onMounted(() => {
+
+
+
+
+onMounted(() => {
   //set the defualt color to white
 });
-*/
+
 
 const data = datas  //this import data directly from json files and use it
 
@@ -180,4 +186,6 @@ h6 {
   display: block;
   margin: 0 auto;
 }
+
+
 </style>

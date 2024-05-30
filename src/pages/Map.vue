@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle } from '@ionic/vue';
-import { Geolocation } from '@capacitor/geolocation'; // Import Geolocation from Capacitor
+import { Geolocation } from '@capacitor/geolocation'; //need to run command npm install @capacitor/geolocation
 import { ref, onMounted } from 'vue'; // Import ref and onMounted from Vue
 import axios from 'axios'; // Run command "npm install axios" to install Axios for this to work if it doesnt work
 
