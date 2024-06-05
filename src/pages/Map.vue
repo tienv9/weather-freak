@@ -1,29 +1,67 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Geolocation</ion-title>
+    <ion-header class="ion-no-border" mode="ios">
+      <ion-toolbar class="ion-padding-start ion-padding-end">
+        <ion-title>Weather</ion-title>
+        <span slot="start">
+          <NotificationButton />
+        </span>
+        <span slot="end">
+          <SearchButton />
+        </span>
       </ion-toolbar>
     </ion-header>
+
     <ion-content>
-      <h4 class="location">{{ lat }}, {{ long }}</h4> 
-      <!-- Displays the lat and long from the geolocation API, uses the "location" class for setting text color and layout -->
-      <h4 class="city-state">{{ city }}, {{ state }}</h4>
-      <!-- Displays the city and state -->
+      <div class="favorites">
+        <h6 class="ion-padding-start">Favorite Cities:</h6>
+        <div class="infoTab ion-padding">
+          <ion-card class="ion-padding" v-for="city in favorites" :key="city">
+            <h4>{{ city }}</h4>
+            <ion-button @click="toggleFavorite(city)">
+              Remove
+            </ion-button>
+          </ion-card>
+        </div>
+      </div>
+
+      <ion-page>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Geolocation</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <h4 class="location">{{ lat }}, {{ long }}</h4>
+          <h4 class="city-state">{{ city }}, {{ state }}</h4>
+          <div class="favorites">
+            <h4>Favorites:</h4>
+            <ion-list>
+              <ion-item v-for="favorite in favorites" :key="favorite">
+                <ion-label>{{ favorite }}</ion-label>
+                <ion-button @click="removeFavorite(favorite)" color="danger">Remove</ion-button>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-content>
+      </ion-page>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle } from '@ionic/vue';
-import { Geolocation } from '@capacitor/geolocation'; //need to run command npm install @capacitor/geolocation
-import { ref, onMounted } from 'vue'; // Import ref and onMounted from Vue
-import axios from 'axios'; // Run command "npm install axios" to install Axios for this to work if it doesnt work
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonButton, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { Geolocation } from '@capacitor/geolocation';
+import NotificationButton from '@/components/NotificationButton.vue';
+import SearchButton from '@/components/SearchButton.vue';
 
 const lat = ref<number | null>(null);
 const long = ref<number | null>(null);
 const city = ref<string>('');
 const state = ref<string>('');
+const favorites = ref<string[]>(['Spokane, WA', 'New York, NY', 'Los Angeles, CA']);
 
 const printCurrentPosition = async () => {
   try {
@@ -36,7 +74,7 @@ const printCurrentPosition = async () => {
   }
 };
 
-const fetchCityAndState = async (latitude: any, longitude: any) => { //need type for it to work
+const fetchCityAndState = async (latitude: number, longitude: number) => {
   try {
     const response = await axios.get('https://nominatim.openstreetmap.org/reverse', {
       params: {
@@ -46,7 +84,7 @@ const fetchCityAndState = async (latitude: any, longitude: any) => { //need type
       }
     });
     const data = response.data;
-    console.log('Geocoding response:', data); 
+    console.log('Geocoding response:', data);
     if (data.address) {
       city.value = data.address.city || data.address.town || data.address.village || '';
       state.value = data.address.state || '';
@@ -58,23 +96,29 @@ const fetchCityAndState = async (latitude: any, longitude: any) => { //need type
   }
 };
 
+function toggleFavorite(city: string) {
+  const index = favorites.value.indexOf(city);
+  if (index === -1) {
+    favorites.value.push(city);
+  } else {
+    favorites.value.splice(index, 1);
+  }
+}
+
+function removeFavorite(favorite: string) {
+  favorites.value = favorites.value.filter(item => item !== favorite);
+}
+
 onMounted(() => {
   printCurrentPosition();
 });
-// url('../images/holder.png') no-repeat center center / cover; png image holder placed here for better visual of lat and long
 </script>
 
 <style scoped>
 ion-content {
-  --background: none;
-  --background-color: none;
-  --background-image: none;
-  --background-position: none;
-  --background-size: none;
-  --background-repeat: none;
-  --background-attachment: none;
-  --background-blend-mode: none;
+  --background: url('../images/blur-background.png') no-repeat center center / cover;
 }
+
 .location {
   color: red;
   text-align: center;
@@ -82,11 +126,39 @@ ion-content {
   font-weight: bold;
   margin-top: 1rem;
 }
+
 .city-state {
   color: red;
   text-align: center;
   font-size: 1.5rem;
   font-weight: bold;
   margin-top: 0.5rem;
+}
+
+.infoTab {
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+ion-card {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  margin: 0px;
+  margin-right: 0.5rem;
+  width: 115px;
+}
+
+h4 {
+  color: black;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.favorites {
+  margin-top: 2rem;
 }
 </style>
